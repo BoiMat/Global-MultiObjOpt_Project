@@ -20,12 +20,12 @@ def main(dateset_func = BTC_1d_Dataset, load=False, save=False):
         with open('gp_model.pkl', 'rb') as f:
             gp = pickle.load(f)
     else:
-        gp = SymbolicMaximizer(population_size=200, generations=200,
+        gp = SymbolicMaximizer(population_size=300, generations=300,
                             tournament_size=20, init_depth=(2, 6), 
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
                             feature_names=features, 
-                            n_jobs=-1, verbose=0, random_state=42)
+                            n_jobs=-1, verbose=1, random_state=42)
 
     gp.fit(dataset, 100)
     
@@ -51,4 +51,4 @@ def main(dateset_func = BTC_1d_Dataset, load=False, save=False):
     
     
 if __name__ == '__main__':
-    main(save=True)
+    main(dataset_func = SP500_1d_Dataset, save=True)
