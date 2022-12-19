@@ -5,9 +5,9 @@ import graphviz
 import pickle
 
 
-def main(dateset_func = BTC_1d_Dataset, load=False, save=False):
+def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    df, df_normalized = dateset_func()
+    df, df_normalized = dataset_func()
 
     features = df_normalized.columns[:-1]
 
@@ -30,7 +30,7 @@ def main(dateset_func = BTC_1d_Dataset, load=False, save=False):
     gp.fit(dataset, 100)
     
     if save:
-        with open('gp_model.pkl', 'wb') as f:
+        with open('gp_SP500_300p_300g.pkl', 'wb') as f:
             pickle.dump(gp, f)
 
     # graph = gp._program.export_graphviz()
@@ -46,7 +46,7 @@ def main(dateset_func = BTC_1d_Dataset, load=False, save=False):
     plt.scatter(df_normalized.index[gp._program.buy_ops], df_normalized['Close'][gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
     # plot a sell signal
     plt.scatter(df_normalized.index[gp._program.sell_ops], df_normalized['Close'][gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
-    plt.savefig('Close.png')
+    plt.savefig('Close_SP500_300p_300g.png')
     #plt.show()
     
     
