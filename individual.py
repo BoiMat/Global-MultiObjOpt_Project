@@ -310,7 +310,14 @@ class Tree(object):
     def raw_fitness(self, init_investment, X):
         self.investment = init_investment
         for i in range(X.shape[0]):
+            if self.investment <= 0:
+                return 0
             self.buy_sell_op(X[i,:-1], X[i,-1], i)
+            
+        if self.in_the_market:
+            self.sell_ops.append(i)
+            self.sell(X[-1,-1])
+            self.in_the_market = False
         
         return self.investment - init_investment
     

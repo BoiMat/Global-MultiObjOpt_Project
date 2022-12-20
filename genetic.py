@@ -207,14 +207,14 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
         params['arities'] = self._arities
         params['method_probs'] = self._method_probs
         
-        # Free allocated memory, if any
-        self._programs = []
-        self.run_details_ = {'generation': [],
-                             'average_length': [],
-                             'average_fitness': [],
-                             'best_length': [],
-                             'best_fitness': [],
-                             'generation_time': []}
+        if not hasattr(self, '_programs'):
+            self._programs = []
+            self.run_details_ = {'generation': [],
+                                'average_length': [],
+                                'average_fitness': [],
+                                'best_length': [],
+                                'best_fitness': [],
+                                'generation_time': []}
 
         prior_generations = len(self._programs)
 
