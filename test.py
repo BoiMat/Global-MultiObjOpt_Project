@@ -30,7 +30,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     gp.fit(dataset, 100)
     
     if save:
-        with open('gp_SP500_300p_300g.pkl', 'wb') as f:
+        with open('gp_BTC_200p_200g.pkl', 'wb') as f:
             pickle.dump(gp, f)
 
     # graph = gp._program.export_graphviz()
@@ -46,9 +46,9 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     plt.scatter(df_normalized.index[gp._program.buy_ops], df_normalized['Close'][gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
     # plot a sell signal
     plt.scatter(df_normalized.index[gp._program.sell_ops], df_normalized['Close'][gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
-    plt.savefig('Close_SP500_200p_200g.png')
+    plt.savefig('Close_BTC_200p_200g.png')
     #plt.show()
     
     
 if __name__ == '__main__':
-    main(dataset_func = SP500_1d_Dataset, save=True)
+    main(save=True)
