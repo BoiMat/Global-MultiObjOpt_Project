@@ -7,7 +7,10 @@ import pickle
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    df, df_normalized = dataset_func()
+    name = 'zscore_BTC_200p_200g'
+    path = 'models/' + name + '.pkl'
+
+    df, df_normalized = dataset_func(zscore=True)
 
     features = df_normalized.columns[:-1]
 
@@ -17,7 +20,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     function_set = default_function_set()
     
     if load:
-        with open('gp_model.pkl', 'rb') as f:
+        with open(path, 'rb') as f:
             gp = pickle.load(f)
     else:
         gp = SymbolicMaximizer(population_size=200, generations=200,
@@ -30,7 +33,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     gp.fit(dataset, 100)
     
     if save:
-        with open('gp_BTC_200p_200g.pkl', 'wb') as f:
+        with open(path, 'wb') as f:
             pickle.dump(gp, f)
 
     # graph = gp._program.export_graphviz()
@@ -38,7 +41,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     # graph.render('tree')
 
     plt.figure(figsize=(16,8))
-    plt.title('Close Price History')
+    plt.title(name)
     plt.plot(df_normalized['Close'])
     plt.xlabel('Date', fontsize=18)
     plt.ylabel('Close Price USD ($)', fontsize=18)
@@ -46,7 +49,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     plt.scatter(df_normalized.index[gp._program.buy_ops], df_normalized['Close'][gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
     # plot a sell signal
     plt.scatter(df_normalized.index[gp._program.sell_ops], df_normalized['Close'][gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
-    plt.savefig('Close_BTC_200p_200g.png')
+    plt.savefig(name + '.png')
     #plt.show()
     
     
