@@ -46,9 +46,9 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     plt.xlabel('Date', fontsize=18)
     plt.ylabel('Close Price USD ($)', fontsize=18)
     # plot a buy signal
-    plt.scatter(df_normalized.index[gp._program.buy_ops], df_normalized['Close'][gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
+    plt.scatter(df_normalized.index[gp._program.buy_ops], df_normalized.iloc[:,-1][gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
     # plot a sell signal
-    plt.scatter(df_normalized.index[gp._program.sell_ops], df_normalized['Close'][gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
+    plt.scatter(df_normalized.index[gp._program.sell_ops], df_normalized.iloc[:,-1][gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
     plt.savefig(name + '.png')
     #plt.show()
     
