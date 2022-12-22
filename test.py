@@ -7,7 +7,7 @@ import pickle
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    name = 'zscore_BTC_200p_200g'
+    name = 'zscore_SP500_200p_200g'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=True)
@@ -54,4 +54,4 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
     
 if __name__ == '__main__':
-    main(save=True)
+    main(dataset_func = SP500_1d_Dataset, save=True)
