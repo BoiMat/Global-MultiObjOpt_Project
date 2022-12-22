@@ -42,7 +42,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
 
     plt.figure(figsize=(16,8))
     plt.title(name)
-    plt.plot(df_normalized['Close'])
+    plt.plot(df_normalized.iloc[:,-1])
     plt.xlabel('Date', fontsize=18)
     plt.ylabel('Close Price USD ($)', fontsize=18)
     # plot a buy signal
