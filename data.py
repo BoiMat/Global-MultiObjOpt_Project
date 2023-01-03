@@ -7,8 +7,8 @@ from sklearn.preprocessing import MinMaxScaler
 
 def BTC_1d_Dataset(zscore = False):
     
-    df = pd.read_csv('Binance_BTCUSDT_d.csv')
-    df.drop(['symbol', 'unix', 'Volume USDT', 'tradecount'], axis=1, inplace=True)
+    df = pd.read_csv('Bitstamp_BTCUSD_d.csv')
+    df.drop(['symbol', 'unix', 'Volume USD'], axis=1, inplace=True)
     df.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
     df = df.sort_values('Date')
     df = AddIndicators(df)
