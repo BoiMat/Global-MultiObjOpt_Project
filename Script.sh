@@ -16,3 +16,9 @@ python test.py
 end=`date +%s`
 
 runtime=$((end-start))
+
+minutes=$(( (runtime % 3600) / 60 )) 
+seconds=$(( (runtime % 3600) % 60 )) 
+
+echo "Runtime: $minutes:$seconds (mm:ss)"
+
