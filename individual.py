@@ -198,11 +198,11 @@ class Tree(object):
     
     def evaluate(self, X):
         
-        res = self.execute(X)
+        res = np.tanh(self.execute(X))
         
-        if res > 0.33:
+        if res > 0.5:
             return 1
-        if res < -0.33:
+        if res < -0.5:
             return -1
         return 0
     
