@@ -103,8 +103,6 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
     def __init__(self,
                  *,
                  population_size=1000,
-                 hall_of_fame=None,
-                 n_components=None,
                  generations=20,
                  tournament_size=20,
                  const_range=(-1., 1.),
@@ -123,8 +121,6 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
                  random_state=None):
 
         self.population_size = population_size
-        self.hall_of_fame = hall_of_fame
-        self.n_components = n_components
         self.generations = generations
         self.tournament_size = tournament_size
         self.const_range = const_range
@@ -174,14 +170,6 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
     def fit(self, X, init_investment):
         
         random_state = check_random_state(self.random_state)
-
-        hall_of_fame = self.hall_of_fame
-        if hall_of_fame is None:
-            hall_of_fame = self.population_size
-        
-        n_components = self.n_components
-        if n_components is None:
-            n_components = hall_of_fame
         
         self._function_set = []
         for function in self.function_set:

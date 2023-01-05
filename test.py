@@ -7,10 +7,10 @@ import pickle
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    name = 'zscore_lowfeatures_SP500_200p_200g'
+    name = 'Close_lowfeatures_BTC_100p_20g'
     path = 'models/' + name + '.pkl'
 
-    df, df_normalized = dataset_func(zscore=True)
+    df, df_normalized = dataset_func(zscore=False)
 
     features = df_normalized.columns[:-1]
 
@@ -54,4 +54,4 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
     
 if __name__ == '__main__':
-    main(dataset_func = SP500_1d_Dataset, save=True)
+    main(dataset_func = BTC_1d_Dataset, save=False)

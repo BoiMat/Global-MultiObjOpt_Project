@@ -299,25 +299,28 @@ class Tree(object):
         res = self.evaluate(X)
         
         if res == 1:
-            if not self.in_the_market:
+            if self.in_the_market == False:
                 self.buy_ops.append(i)
-                self.buy(current_price) 
+                self.buy(current_price)
         if res == -1:
             if self.in_the_market:
                 self.sell_ops.append(i)
                 self.sell(current_price)
         
     def raw_fitness(self, init_investment, X):
-        self.investment = init_investment
+        
         for i in range(X.shape[0]):
             if self.investment <= 0:
-                return 0
+                break
             self.buy_sell_op(X[i,:-1], X[i,-1], i)
             
         if self.in_the_market:
             self.sell_ops.append(i)
             self.sell(X[-1,-1])
             self.in_the_market = False
+
+        if self.investment < init_investment:
+            return 0
         
         return self.investment - init_investment
     

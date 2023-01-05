@@ -18,10 +18,16 @@ def BTC_1d_Dataset(zscore = False):
     if zscore:
         df['z-score'] = (df['Close'] - df['Close'].rolling(200).mean()) / df['Close'].rolling(200).std()
     
-    # normalize the dataset between -1 and 1
-    scaler = MinMaxScaler(feature_range=(-1, 1))
+    # # normalize the dataset between -1 and 1
+    # scaler = MinMaxScaler(feature_range=(-1, 1))
+    # df.drop(['Open', 'High', 'Low', 'Date'], axis=1, inplace=True)
+    # df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+    
     df = df.drop(['Open', 'High', 'Low', 'Date'], axis=1)
-    df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+    df_normalized = df.copy()
+    for column in df_normalized.columns:
+        df_normalized[column] = (df_normalized[column] -
+                            df_normalized[column].mean()) / df_normalized[column].std() 
 
     df['day-2'] = df[yhat].shift(2)
     df['day-3'] = df[yhat].shift(3)
@@ -46,8 +52,7 @@ def BTC_1d_Dataset(zscore = False):
     df.reset_index(drop=True, inplace=True)
     
     if zscore:
-        temp1 = df['z-score']
-        temp2 = df_normalized['z-score']
+        temp1, temp2 = df['z-score'], df_normalized['z-score']
         df.drop(['Close', 'z-score'], axis=1, inplace=True)
         df_normalized.drop(['Close', 'z-score'], axis=1, inplace=True)
         df['z-score'] = temp1
@@ -58,6 +63,8 @@ def BTC_1d_Dataset(zscore = False):
         cols = cols[1:] + cols[:1]
         df = df[cols]
         df_normalized = df_normalized[cols]
+    
+    df_normalized.iloc[:, -1] = df.iloc[:, -1]
     
     return df, df_normalized
 
@@ -79,10 +86,16 @@ def SP500_1d_Dataset(zscore = False):
         df['z-score'] = (df['Close'] - df['Close'].rolling(200).mean()) / df['Close'].rolling(200).std()
 
     yhat = 'Close' if zscore == False else 'z-score'
-    # normalize the dataset between -1 and 1
-    scaler = MinMaxScaler(feature_range=(-1, 1))
-    df = df.drop(['Open', 'High', 'Low'], axis=1)
-    df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+    # # normalize the dataset between -1 and 1
+    # scaler = MinMaxScaler(feature_range=(-1, 1))
+    # df.drop(['Open', 'High', 'Low'], axis=1, inplace=True)
+    # df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+    
+    df.drop(['Open', 'High', 'Low'], axis=1, inplace=True)
+    df_normalized = df.copy()
+    for column in df_normalized.columns:
+        df_normalized[column] = (df_normalized[column] -
+                            df_normalized[column].mean()) / df_normalized[column].std() 
     
     df['day-1'] = df[yhat].shift(1)
     df['day-2'] = df[yhat].shift(2)
@@ -119,6 +132,8 @@ def SP500_1d_Dataset(zscore = False):
         cols = cols[1:] + cols[:1]
         df = df[cols]
         df_normalized = df_normalized[cols]
+        
+    df_normalized.iloc[:, -1] = df.iloc[:, -1]
     
     return df, df_normalized
 
