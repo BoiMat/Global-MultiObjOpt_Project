@@ -49,7 +49,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     plt.scatter(df_normalized.index[gp._program.buy_ops], df_normalized.iloc[:,-1][gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
     # plot a sell signal
     plt.scatter(df_normalized.index[gp._program.sell_ops], df_normalized.iloc[:,-1][gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
-    plt.savefig(name + '.png')
+    plt.savefig('images/' + name + '.png')
     #plt.show()
     
     
