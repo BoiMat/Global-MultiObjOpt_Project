@@ -47,6 +47,8 @@ def BTC_1d_Dataset(zscore = False):
     df_normalized['day-7'] = df_normalized[yhat].shift(7)
 
     #df_normalized['Close'] = df['Close']
+    df = df.replace(0, 0.000001)
+    df_normalized = df_normalized.replace(0, 0.000001)
     df.dropna(inplace=True)
     df_normalized.dropna(inplace=True)
     df_normalized.reset_index(drop=True, inplace=True)
@@ -115,6 +117,8 @@ def SP500_1d_Dataset(zscore = False):
     df_normalized['day-7'] = df_normalized[yhat].shift(7)
 
     #df_normalized['Close'] = df['Close']
+    df = df.replace(0, 0.000001)
+    df_normalized = df_normalized.replace(0, 0.000001)
     df.dropna(inplace=True)
     df_normalized.dropna(inplace=True)
     df_normalized.reset_index(drop=True, inplace=True)
