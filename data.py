@@ -66,7 +66,7 @@ def BTC_1d_Dataset(zscore = False):
         cols = cols[1:] + cols[:1]
         df = df[cols]
         df_normalized = df_normalized[cols]
-        df_normalized.iloc[:, -1] = df.iloc[:, -1]
+        #df_normalized.iloc[:, -1] = df.iloc[:, -1]
     
     return df, df_normalized
 
@@ -137,7 +137,7 @@ def SP500_1d_Dataset(zscore = False):
         cols = cols[1:] + cols[:1]
         df = df[cols]
         df_normalized = df_normalized[cols]
-        df_normalized.iloc[:, -1] = df.iloc[:, -1]
+        #df_normalized.iloc[:, -1] = df.iloc[:, -1]
         
     return df, df_normalized
 
