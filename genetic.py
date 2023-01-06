@@ -317,6 +317,6 @@ class SymbolicMaximizer(BaseSymbolic):
         # if not hasattr(self, '_program'):
         #     raise NotFittedError('SymbolicMaximizer not fitted.')
         
-        #self._program.investment = init_investment
+        self._program.investment = init_investment
         score = self._program.raw_fitness(init_investment, X)
         return score - init_investment

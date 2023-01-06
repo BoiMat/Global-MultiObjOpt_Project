@@ -309,16 +309,20 @@ class Tree(object):
         
     def raw_fitness(self, init_investment, X):
         
+        self.investment = init_investment
+        
         for i in range(X.shape[0]):
             if self.investment <= 0:
                 break
             self.buy_sell_op(X[i,:-1], X[i,-1], i)
-            
+        
+        # if we are in the market at the end of the time series, sell    
         if self.in_the_market:
             self.sell_ops.append(i)
             self.sell(X[-1,-1])
             self.in_the_market = False
 
+        # if we lost some money, return 0
         if self.investment < init_investment:
             return 0
         
