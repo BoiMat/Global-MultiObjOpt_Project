@@ -8,12 +8,12 @@ import time
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    start_time = time.time()
+    #start_time = time.time()
     
     name = 'zscore_lowfeatures_BTC_300p_200g_newdata'
     path = 'models/' + name + '.pkl'
 
-    df, df_normalized = dataset_func(zscore=True)
+    df, df_normalized = dataset_func(zscore=False)
 
     features = df_normalized.columns[:-1]
 
@@ -26,12 +26,12 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
         with open(path, 'rb') as f:
             gp = pickle.load(f)
     else:
-        gp = SymbolicMaximizer(population_size=300, generations=200,
+        gp = SymbolicMaximizer(population_size=2, generations=5,
                             tournament_size=20, init_depth=(2, 6), 
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
                             feature_names=features, 
-                            n_jobs=-1, verbose=1, random_state=42)
+                            n_jobs=-1, verbose=0, random_state=42)
 
     gp.fit(dataset, 1)
     
@@ -52,11 +52,11 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     plt.scatter(df_normalized.index[gp._program.buy_ops], df_normalized.iloc[:,-1][gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
     # plot a sell signal
     plt.scatter(df_normalized.index[gp._program.sell_ops], df_normalized.iloc[:,-1][gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
-    plt.savefig('images/' + name + '.png')
-    #plt.show()
+    if save:
+        plt.savefig('images/' + name + '.png')
     
-    print('Runtime: ', time.time() - start_time)
+    #print('Runtime: ', time.time() - start_time)
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, save=True)
+    main(dataset_func = BTC_1d_Dataset, save=False)
