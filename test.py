@@ -3,9 +3,12 @@ from genetic import SymbolicMaximizer
 from data import *
 import graphviz
 import pickle
+import time
 
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
+    
+    start_time = time.time()
     
     name = 'zscore_lowfeatures_BTC_300p_200g_newdata'
     path = 'models/' + name + '.pkl'
@@ -28,7 +31,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
                             feature_names=features, 
-                            n_jobs=-1, verbose=0, random_state=42)
+                            n_jobs=-1, verbose=1, random_state=42)
 
     gp.fit(dataset, 100)
     
@@ -51,6 +54,8 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     plt.scatter(df_normalized.index[gp._program.sell_ops], df_normalized.iloc[:,-1][gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
     plt.savefig('images/' + name + '.png')
     #plt.show()
+    
+    print('Runtime: ', time.time() - start_time)
     
     
 if __name__ == '__main__':
