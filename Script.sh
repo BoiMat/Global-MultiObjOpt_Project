@@ -1,8 +1,8 @@
 #!/bin/bash
-#PBS -q dssc
-#PBS -l nodes=1:ppn=24
+#PBS -q dssc_gpu
+#PBS -l nodes=1:ppn=48
 #PBS -l walltime=03:00:00
-#PBS -N serial
+#PBS -N weak_gpu
 
 cd $PBS_O_WORKDIR/
 
@@ -20,5 +20,5 @@ runtime=$((end-start))
 minutes=$(( (runtime % 3600) / 60 )) 
 seconds=$(( (runtime % 3600) % 60 )) 
 
-echo "Runtime: $minutes:$seconds (mm:ss)"
+echo "Runtime BTC: $minutes:$seconds (mm:ss)" >> timings.txt
 
