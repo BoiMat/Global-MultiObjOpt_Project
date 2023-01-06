@@ -33,7 +33,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
                             feature_names=features, 
                             n_jobs=-1, verbose=1, random_state=42)
 
-    gp.fit(dataset, 100)
+    gp.fit(dataset, 1)
     
     if save:
         with open(path, 'wb') as f:
