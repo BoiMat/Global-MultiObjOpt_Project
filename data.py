@@ -30,9 +30,9 @@ def BTC_1d_Dataset(zscore = False):
     #     df_normalized[column] = (df_normalized[column] -
     #                         df_normalized[column].mean()) / df_normalized[column].std() 
 
+    df['day-1'] = df[yhat].shift(1)
     df['day-2'] = df[yhat].shift(2)
     df['day-3'] = df[yhat].shift(3)
-    df['day-1'] = df[yhat].shift(1)
     df['day-4'] = df[yhat].shift(4)
     df['day-5'] = df[yhat].shift(5)
     df['day-6'] = df[yhat].shift(6)
