@@ -73,14 +73,14 @@ def BTC_1d_Dataset(zscore = False):
 def SP500_1d_Dataset(zscore = False):
     df = pd.read_csv('S&P500.csv')
     df.columns = ['Date','Close', 'Open', 'High', 'Low', 'Volume', 'Change']
-    df['Change'] = df['Change'].str.replace('%', '')
+    # df['Change'] = df['Change'].str.replace('%', '')
     df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%Y')
     df = df.sort_values('Date')
     df['Open'] = df['Open'].str.replace(',', '').astype(float)
     df['High'] = df['High'].str.replace(',', '').astype(float)
     df['Low'] = df['Low'].str.replace(',', '').astype(float)
     df['Close'] = df['Close'].str.replace(',', '').astype(float)
-    df['Change'] = df['Change'].str.replace(',', '').astype(float)
+    # df['Change'] = df['Change'].str.replace(',', '').astype(float)
     df = AddIndicators(df)
     df.drop(['Date', 'Volume'], axis=1, inplace=True)
     
@@ -93,7 +93,7 @@ def SP500_1d_Dataset(zscore = False):
     # df.drop(['Open', 'High', 'Low'], axis=1, inplace=True)
     # df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
     
-    df.drop(['Open', 'High', 'Low'], axis=1, inplace=True)
+    df.drop(['Open', 'High', 'Low', 'Change'], axis=1, inplace=True)
     df_normalized = (df - df.min()) / (df.max() - df.min())
     # df_normalized = df.copy()
     # for column in df_normalized.columns:
