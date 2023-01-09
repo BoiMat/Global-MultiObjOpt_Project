@@ -292,7 +292,6 @@ class Tree(object):
     
     def sell(self, current_price):
         self.in_the_market = False
-        #print(f'Buy price: {self.buy_price}. Capital: {self.investment}. Ammount: {self.investment / self.buy_price}. \n Sell price: {current_price}. Capital: {self.investment / self.buy_price * current_price}.')
         self.investment = self.investment / self.buy_price * current_price
         
     def buy_sell_op(self, X, current_price, i):
