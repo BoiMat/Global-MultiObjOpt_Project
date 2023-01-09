@@ -59,4 +59,4 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
     
 if __name__ == '__main__':
-    main(dataset_func = SP500_1d_Dataset, save=False)
+    main(dataset_func = SP500_1d_Dataset, save=True)

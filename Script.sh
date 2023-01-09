@@ -2,7 +2,7 @@
 #PBS -q dssc_gpu
 #PBS -l nodes=1:ppn=48
 #PBS -l walltime=03:00:00
-#PBS -N weak_gpu
+#PBS -N weak
 
 cd $PBS_O_WORKDIR/
 
