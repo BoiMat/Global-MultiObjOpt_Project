@@ -8,9 +8,7 @@ import time
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    #start_time = time.time()
-    
-    name = 'zscore_lowfeatures_BTC_400p_300g_newdata'
+    name = 'zscore_lowfeatures_SP500_400p_300g_newdata'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=True)
@@ -39,10 +37,6 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
         with open(path, 'wb') as f:
             pickle.dump(gp, f)
 
-    # graph = gp._program.export_graphviz()
-    # graph = graphviz.Source(graph)
-    # graph.render('tree')
-
     plt.figure(figsize=(16,8))
     plt.title(name)
     plt.plot(df_normalized.iloc[:,-1])
@@ -55,8 +49,6 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     if save:
         plt.savefig('images/' + name + '.png')
     
-    #print('Runtime: ', time.time() - start_time)
-    
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, save=True)
+    main(dataset_func = SP500_1d_Dataset, save=True)
