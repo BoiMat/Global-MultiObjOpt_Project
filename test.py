@@ -10,10 +10,10 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
     #start_time = time.time()
     
-    name = 'Close_lowfeatures_BTC_400p_300g_newdata'
+    name = 'zscore_lowfeatures_BTC_400p_300g_newdata'
     path = 'models/' + name + '.pkl'
 
-    df, df_normalized = dataset_func(zscore=False)
+    df, df_normalized = dataset_func(zscore=True)
 
     features = df_normalized.columns[:-1]
 
@@ -31,7 +31,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
                             feature_names=features, 
-                            n_jobs=-1, verbose=0, random_state=42)
+                            n_jobs=-1, verbose=1, random_state=42)
 
     gp.fit(dataset, 1)
     
