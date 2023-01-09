@@ -10,10 +10,10 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
     #start_time = time.time()
     
-    name = 'zscore_lowfeatures_BTC_300p_200g_newdata'
+    name = 'zscore_lowfeatures_SP500_300p_200g_newdata'
     path = 'models/' + name + '.pkl'
 
-    df, df_normalized = dataset_func(zscore=False)
+    df, df_normalized = dataset_func(zscore=True)
 
     features = df_normalized.columns[:-1]
 
@@ -59,4 +59,4 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, save=False)
+    main(dataset_func = SP500_1d_Dataset, save=False)
