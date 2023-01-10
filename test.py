@@ -8,7 +8,7 @@ import time
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    name = 'zscore_lowfeatures_BTC_500p_200g_600test'
+    name = 'zscore_lowfeatures_SP500_500p_200g_600test'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=True)
@@ -29,7 +29,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
                             feature_names=features, 
-                            n_jobs=-1, verbose=0, random_state=42)
+                            n_jobs=-1, verbose=1, random_state=1)
 
     gp.fit(dataset, 1)
     
@@ -51,4 +51,4 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, save=True)
+    main(dataset_func = SP500_1d_Dataset, save=True)
