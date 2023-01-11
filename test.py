@@ -8,7 +8,7 @@ import time
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    name = 'BTC_100p_50g_zscore'
+    name = 'BTC_300p_200g_zscore'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=True)
@@ -24,12 +24,12 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
         with open(path, 'rb') as f:
             gp = pickle.load(f)
     else:
-        gp = SymbolicMaximizer(population_size=100, generations=50,
+        gp = SymbolicMaximizer(population_size=300, generations=200,
                             tournament_size=20, init_depth=(2, 6), 
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
                             feature_names=features, 
-                            n_jobs=-1, verbose=1, random_state=1)
+                            n_jobs=-1, verbose=0, random_state=1)
 
     gp.fit(dataset, 1)
     
