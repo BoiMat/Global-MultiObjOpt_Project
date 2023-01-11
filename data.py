@@ -28,9 +28,9 @@ def BTC_1d_Dataset(zscore = False):
     for column in df_normalized.columns:
         df_normalized[column] = (df_normalized[column] -
                             df_normalized[column].mean()) / df_normalized[column].std()
-        
-    df['z-score'] = zscore_col
-    df_normalized['z-score'] = zscore_col
+    if zscore:        
+    	df['z-score'] = zscore_col
+    	df_normalized['z-score'] = zscore_col
 
     df['day-1'] = df[yhat].shift(1)
     df['day-2'] = df[yhat].shift(2)
