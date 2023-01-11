@@ -16,19 +16,21 @@ def BTC_1d_Dataset(zscore = False):
     yhat = 'Close' if zscore == False else 'z-score'
     
     if zscore:
-        df['z-score'] = (df['Close'] - df['Close'].rolling(200).mean()) / df['Close'].rolling(200).std()
+        zscore_col = (df['Close'] - df['Close'].rolling(200).mean()) / df['Close'].rolling(200).std()
+    
+    df.drop(['Open', 'High', 'Low', 'Date'], axis=1, inplace=True)
     
     # # normalize the dataset between -1 and 1
     # scaler = MinMaxScaler(feature_range=(-1, 1))
-    # df.drop(['Open', 'High', 'Low', 'Date'], axis=1, inplace=True)
     # df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
     
-    df = df.drop(['Open', 'High', 'Low', 'Date'], axis=1)
-    df_normalized = (df - df.min()) / (df.max() - df.min())
-    # df_normalized = df.copy()
-    # for column in df_normalized.columns:
-    #     df_normalized[column] = (df_normalized[column] -
-    #                         df_normalized[column].mean()) / df_normalized[column].std() 
+    df_normalized = df.copy()
+    for column in df_normalized.columns:
+        df_normalized[column] = (df_normalized[column] -
+                            df_normalized[column].mean()) / df_normalized[column].std()
+        
+    df['z-score'] = zscore_col
+    df_normalized['z-score'] = zscore_col
 
     df['day-1'] = df[yhat].shift(1)
     df['day-2'] = df[yhat].shift(2)
@@ -54,19 +56,14 @@ def BTC_1d_Dataset(zscore = False):
     df_normalized.reset_index(drop=True, inplace=True)
     df.reset_index(drop=True, inplace=True)
     
+    temp = df.pop('Close')
+    df_normalized.pop('Close')
+    df = df.assign(Close=temp)
+    df_normalized = df_normalized.assign(Close=temp)
+    
     if zscore:
-        temp1, temp2 = df['z-score'], df_normalized['z-score']
-        df.drop(['Close', 'z-score'], axis=1, inplace=True)
-        df_normalized.drop(['Close', 'z-score'], axis=1, inplace=True)
-        df['z-score'] = temp1
-        df_normalized['z-score'] = temp2  
-    else:
-        # move 'Close' column to last column
-        cols = df_normalized.columns.tolist()
-        cols = cols[1:] + cols[:1]
-        df = df[cols]
-        df_normalized = df_normalized[cols]
-        #df_normalized.iloc[:, -1] = df.iloc[:, -1]
+        df.drop(['z-score'], axis=1, inplace=True)
+        df_normalized.drop(['z-score'], axis=1, inplace=True)
     
     return df, df_normalized
 

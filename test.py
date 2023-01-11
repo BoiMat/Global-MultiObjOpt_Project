@@ -8,15 +8,15 @@ import time
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    name = 'zscore_lowfeatures_SP500_500p_200g_600test'
+    name = 'BTC_100p_50g_zscore'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=True)
 
     features = df_normalized.columns[:-1]
 
-    dataset = np.array(df_normalized[:-600])
-    test = np.array(df_normalized[-600:])
+    dataset = np.array(df_normalized[:-200])
+    test = np.array(df_normalized[-200:])
     
     function_set = default_function_set()
     
@@ -24,7 +24,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
         with open(path, 'rb') as f:
             gp = pickle.load(f)
     else:
-        gp = SymbolicMaximizer(population_size=500, generations=200,
+        gp = SymbolicMaximizer(population_size=100, generations=50,
                             tournament_size=20, init_depth=(2, 6), 
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
@@ -51,4 +51,4 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
     
 if __name__ == '__main__':
-    main(dataset_func = SP500_1d_Dataset, save=True)
+    main(dataset_func = BTC_1d_Dataset, save=True)
