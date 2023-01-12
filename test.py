@@ -8,10 +8,10 @@ import time
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    name = 'BTC_500p_200g_close'
+    name = 'BTC_400p_400g_zscore_newnewfeats'
     path = 'models/' + name + '.pkl'
 
-    df, df_normalized = dataset_func(zscore=False)
+    df, df_normalized = dataset_func(zscore=True)
 
     features = df_normalized.columns[:-1]
 
@@ -24,7 +24,7 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
         with open(path, 'rb') as f:
             gp = pickle.load(f)
     else:
-        gp = SymbolicMaximizer(population_size=500, generations=200,
+        gp = SymbolicMaximizer(population_size=400, generations=400,
                             tournament_size=20, init_depth=(2, 6), 
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
