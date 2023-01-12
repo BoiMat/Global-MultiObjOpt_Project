@@ -8,10 +8,10 @@ import time
 
 def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
-    name = 'BTC_500p_200g_zscore_morefeatures'
+    name = 'BTC_500p_200g_close'
     path = 'models/' + name + '.pkl'
 
-    df, df_normalized = dataset_func(zscore=True)
+    df, df_normalized = dataset_func(zscore=False)
 
     features = df_normalized.columns[:-1]
 
