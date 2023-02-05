@@ -52,7 +52,7 @@ class Rules_bot(object):
       
       program = []
       
-      number_of_rules = random_state.randint(2, max_num_rules)
+      number_of_rules = random_state.randint(3, max_num_rules)
       for _ in range(number_of_rules-1):
         rule = self.generate_new_rule(random_state, rules, indicators)
         program.append(rule)
@@ -225,11 +225,22 @@ class Rules_bot(object):
           
     def raw_fitness(self, data, prices, rules, init_investment):
       self.investment = init_investment
+      
       for i in range(4, len(data)):
         data_window = data[i-4:i,:]
         current_price = prices[i]
         self.buy_sell_op(data_window, current_price, i, rules)
-      return self.investment
+        
+      # if we are in the market at the end of the time series, sell    
+      if self.in_the_market:
+        self.sell_ops.append(i)
+        self.sell(prices[-1])
+        self.in_the_market = False
+
+      # if we lost some money, return 0
+      if self.investment < init_investment:
+        return 0
+      return self.investment - init_investment
     
     def length(self):
         return len(self.program)

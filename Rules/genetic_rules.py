@@ -9,7 +9,7 @@ from sklearn.base import BaseEstimator
 
 MAX_INT = np.iinfo(np.int32).max
 
-def _parallel_evolve(n_programs, parents, data, prices, init_investment, seeds, params):
+def _parallel_evolve(n_programs, parents, data, prices, init_investment, seeds, params, elitism):
 
     tournament_size = params['tournament_size']
     rules_set = params['rules_set']
@@ -83,6 +83,12 @@ def _parallel_evolve(n_programs, parents, data, prices, init_investment, seeds, 
         program.raw_fitness_ = program.raw_fitness(data, prices, rules_set, init_investment)
 
         programs.append(program)
+    
+    if elitism & (parents is not None):    
+        # add the best 20 programs to the next generation
+        hall_of_fame = sorted(parents, key=lambda x: x.raw_fitness_, reverse=True)[:20]
+        for program in hall_of_fame:
+            programs.append(program)
 
     return programs
 
@@ -105,6 +111,7 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
                  p_indicator_mutation=0.01,
                  #p_point_replace=0.05,
                  indicators_set=None,
+                 elitism=False,
                  n_jobs=1,
                  verbose=0,
                  random_state=None):
@@ -121,7 +128,7 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
         self.p_rule_mutation = p_rule_mutation
         self.p_indicators_mutation = p_indicators_mutation
         self.p_indicator_mutation = p_indicator_mutation
-        #self.p_point_replace = p_point_replace
+        self.elitism = elitism
         self.indicators_set = indicators_set
         self.n_jobs = n_jobs
         self.verbose = verbose
@@ -218,7 +225,7 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
             seeds = random_state.randint(MAX_INT, size=self.population_size)
             
             population = Parallel(n_jobs=n_jobs, verbose=int(self.verbose > 1))(
-                delayed(_parallel_evolve)(n_programs[i], parents, data, prices, init_investment, seeds[starts[i]:starts[i+1]], params) 
+                delayed(_parallel_evolve)(n_programs[i], parents, data, prices, init_investment, seeds[starts[i]:starts[i+1]], params, self.elitism) 
                 for i in range(n_jobs))
             
             population = list(itertools.chain.from_iterable(population))
@@ -274,7 +281,7 @@ class SymbolicMaximizer(BaseSymbolic):
                  p_rule_mutation=0.01,
                  p_indicators_mutation=0.01,
                  p_indicator_mutation=0.01,
-                 #p_point_replace=0.05,
+                 elitism=False,
                  indicators_set=None,
                  n_jobs=1,
                  verbose=0,
@@ -293,7 +300,7 @@ class SymbolicMaximizer(BaseSymbolic):
             p_rule_mutation=p_rule_mutation,
             p_indicators_mutation=p_indicators_mutation,
             p_indicator_mutation=p_indicator_mutation,
-            #p_point_replace=p_point_replace,
+            elitism=elitism,
             indicators_set=indicators_set,
             n_jobs=n_jobs,
             verbose=verbose,
