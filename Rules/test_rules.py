@@ -12,7 +12,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g_rules'
+    name = f'BTC_{pop}p_{gen}g_rules_elitism'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=zscore)
@@ -22,12 +22,10 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
 
     df.drop(['Close'], axis=1, inplace=True)
     
-    dataset = np.array(df_normalized[:-200])
-    test = np.array(df_normalized[-200:])
-    
-    indicators = df.columns
     dataset = np.array(df[:-200])
     test = np.array(df[-200:])
+    
+    indicators = df.columns
     
     rules = default_rules_set()
     
@@ -60,4 +58,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=False, verbose=0, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=300, generations=300, zscore=False, verbose=0, load=False, save=True)
