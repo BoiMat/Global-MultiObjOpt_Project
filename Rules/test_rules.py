@@ -12,7 +12,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g_rules_elitism'
+    name = f'BTC_{pop}p_{gen}g_rules'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=zscore)
@@ -37,7 +37,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
                                tournament_size=20, rules_set=rules, 
                                indicators_set=indicators, 
                                n_jobs=-1, verbose=verbose, 
-                               random_state=1, elitism=True)
+                               random_state=1, elitism=False)
 
     gp.fit(dataset, prices, 100)
     
@@ -52,7 +52,6 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     # plot a buy signal
     plt.scatter(df.index[gp._program.buy_ops], prices[gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
     plt.scatter(df.index[gp._program.sell_ops], prices[gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
-    plt.show()
     if save:
         plt.savefig('images/' + name + '.png')
     
