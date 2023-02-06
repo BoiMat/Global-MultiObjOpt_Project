@@ -33,17 +33,23 @@ class Rules_bot(object):
       if specific_rule_type is None:
         rule_type = random_state.randint(0, len(rules))
       else:
-        rule_type = specific_rule_type
-      
-      rule_index = random_state.randint(0, len(rules[rule_type]))
-      arity = rules[rule_type][rule_index].arity
+        possible_rule_types = [0, 2] if specific_rule_type == 'buy' else [1, 2]
+        rule_type = random_state.choice(possible_rule_types)
         
       if rule_type == 2:
+        if specific_rule_type is None:
+          rule_index = random_state.randint(0, len(rules[2]))
+        elif specific_rule_type=='buy':
+          rule_index = random_state.randint(0, len(rules[2])/2)
+        else:
+          rule_index = random_state.randint(len(rules[2])/2, len(rules[2]))
+          
         rule1 = self.generate_new_rule(random_state, rules[0:2], indicators)
         rule2 = self.generate_new_rule(random_state, rules[0:2], indicators)
         rule = [rule_type, rule_index, rule1, rule2]
-        return rule  
-    
+        return rule
+
+      arity = rules[rule_type][rule_index].arity
       indicator_indeces = random_state.randint(0, len(indicators), arity)
       rule = [rule_type, rule_index, indicator_indeces]
       return rule
@@ -61,9 +67,9 @@ class Rules_bot(object):
         rule_type = program[-1][0]
         rule_index = program[-1][1]
         if rules[rule_type][rule_index].is_buyrule():
-          rule = self.generate_new_rule(random_state, rules, indicators, 1)
+          rule = self.generate_new_rule(random_state, rules, indicators, 'sell')
         else:
-          rule = self.generate_new_rule(random_state, rules, indicators, 0)
+          rule = self.generate_new_rule(random_state, rules, indicators, 'buy')
         program.append(rule)
       else:
         rule = self.generate_new_rule(random_state, rules, indicators)
