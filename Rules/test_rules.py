@@ -12,7 +12,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g_rules_elitism'
+    name = f'BTC_{pop}p_{gen}g_rules'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=zscore)
@@ -37,7 +37,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
                                tournament_size=20, rules_set=rules, 
                                indicators_set=indicators, 
                                n_jobs=-1, verbose=verbose, 
-                               random_state=1, elitism=True)
+                               random_state=1, elitism=False)
 
     gp.fit(dataset, prices, 100)
     
