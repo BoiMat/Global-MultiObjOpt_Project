@@ -72,11 +72,11 @@ def _parallel_evolve(n_programs, parents, data, prices, init_investment, seeds, 
                           'parent_nodes': []}
 
         program = Rules_bot( max_num_rules = max_num_rules,
-                        rules=rules_set,
-                        indicators=indicators_set,
-                        random_state=random_state,
-                        init_investment=init_investment,
-                        program=program )
+                             rules=rules_set,
+                             indicators=indicators_set,
+                             random_state=random_state,
+                             init_investment=init_investment,
+                             program=program )
 
         program.parents = genome      
         
