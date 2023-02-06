@@ -49,6 +49,7 @@ class Rules_bot(object):
         rule = [rule_type, rule_index, rule1, rule2]
         return rule
 
+      rule_index = random_state.randint(0, len(rules[rule_type]))
       arity = rules[rule_type][rule_index].arity
       indicator_indeces = random_state.randint(0, len(indicators), arity)
       rule = [rule_type, rule_index, indicator_indeces]
