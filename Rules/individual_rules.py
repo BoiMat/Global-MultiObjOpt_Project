@@ -134,7 +134,7 @@ class Rules_bot(object):
       rule_type = removed[0]
       
       if rule_type == 2:
-        rule_type = 0 if self.rules[rule_type][removed[1]].is_buyrule() else 1
+        rule_type = 'buy' if self.rules[rule_type][removed[1]].is_buyrule() else 'sell'
       
       chicken = self.generate_new_rule(random_state, self.rules, self.indicators, rule_type)
       self.program[rule_index] = chicken
