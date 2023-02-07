@@ -36,7 +36,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
         gp = SymbolicMaximizer(population_size=pop, generations=gen,
                                tournament_size=20, max_num_rules=15, 
 			                   rules_set=rules, indicators_set=indicators, 
-                               n_jobs=1, verbose=verbose, 
+                               n_jobs=-1, verbose=verbose, 
                                random_state=1, elitism=False)
 
     gp.fit(dataset, prices, 100)
@@ -57,4 +57,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=500, generations=500, zscore=False, verbose=1, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=500, generations=500, zscore=False, verbose=0, load=False, save=True)

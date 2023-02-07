@@ -51,13 +51,13 @@ def _parallel_evolve(n_programs, parents, data, prices, init_investment, seeds, 
                 program, removed, _ = parent.rule_mutation(random_state)
                 genome = {'method': 'Rule Mutation',
                           'parent_idx': parent_index,
-                          'parent_nodes': removed}
+                          'parent_node': removed}
             elif method < method_probs[2]:
                 # indicators_mutation
                 program, removed = parent.indicators_mutation(random_state)
                 genome = {'method': 'Indicators Mutation',
                           'parent_idx': parent_index,
-                          'parent_nodes': removed}
+                          'parent_node': removed}
             elif method < method_probs[3]:
                 # indicator_mutation
                 program, mutated = parent.indicator_mutation(random_state)
@@ -70,7 +70,7 @@ def _parallel_evolve(n_programs, parents, data, prices, init_investment, seeds, 
                 genome = {'method': 'Reproduction',
                           'parent_idx': parent_index,
                           'parent_nodes': []}
-        print(genome)
+                
         program = Rules_bot( max_num_rules = max_num_rules,
                              rules=rules_set,
                              indicators=indicators_set,
