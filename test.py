@@ -6,12 +6,15 @@ import pickle
 import time
 
 
-def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
+def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=False, verbose=0, load=False, save=False):
     
-    name = 'BTC_500p_200g_close_morefeatures'
+    pop = population
+    gen = generations
+    
+    name = f'BTC_{pop}p_{gen}g_close_morefeatures'
     path = 'models/' + name + '.pkl'
 
-    df, df_normalized = dataset_func(zscore=False)
+    df, df_normalized = dataset_func(zscore=zscore)
 
     features = df_normalized.columns[:-1]
 
@@ -24,12 +27,12 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
         with open(path, 'rb') as f:
             gp = pickle.load(f)
     else:
-        gp = SymbolicMaximizer(population_size=500, generations=200,
+        gp = SymbolicMaximizer(population_size=pop, generations=gen,
                             tournament_size=20, init_depth=(2, 6), 
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
                             feature_names=features, 
-                            n_jobs=-1, verbose=0, random_state=1)
+                            n_jobs=-1, verbose=verbose, random_state=1)
 
     gp.fit(dataset, 1)
     
@@ -51,4 +54,4 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=500, generations=200, zscore=False, verbose=0, load=False, save=True)
