@@ -70,7 +70,7 @@ def _parallel_evolve(n_programs, parents, data, prices, init_investment, seeds, 
                 genome = {'method': 'Reproduction',
                           'parent_idx': parent_index,
                           'parent_nodes': []}
-
+        print(genome)
         program = Rules_bot( max_num_rules = max_num_rules,
                              rules=rules_set,
                              indicators=indicators_set,
@@ -80,7 +80,7 @@ def _parallel_evolve(n_programs, parents, data, prices, init_investment, seeds, 
 
         program.parents = genome      
         
-        program.raw_fitness_ = program.raw_fitness(data, prices, rules_set, init_investment)
+        program.raw_fitness_ = program.raw_fitness(data, prices, init_investment)
 
         programs.append(program)
     
@@ -317,5 +317,5 @@ class SymbolicMaximizer(BaseSymbolic):
     def predict(self, data, rules, prices, init_investment = 100):
  
         self._program.investment = init_investment
-        score = self._program.raw_fitness(data, prices, rules, init_investment)
+        score = self._program.raw_fitness(data, prices, init_investment)
         return score - init_investment

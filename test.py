@@ -15,8 +15,8 @@ def main(dataset_func = BTC_1d_Dataset, load=False, save=False):
 
     features = df_normalized.columns[:-1]
 
-    dataset = np.array(df_normalized[:-200])
-    test = np.array(df_normalized[-200:])
+    dataset = np.array(df_normalized[:-400])
+    test = np.array(df_normalized[-400:])
     
     function_set = default_function_set()
     

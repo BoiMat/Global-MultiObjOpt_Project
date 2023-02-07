@@ -17,13 +17,13 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
 
     df, df_normalized = dataset_func(zscore=zscore)
 
-    prices = np.array(df['Close'][:-200])
-    prices_test = np.array(df['Close'][-200:])
+    prices = np.array(df['Entry_Price'][:-400])
+    prices_test = np.array(df['Entry_Price'][-400:])
 
-    df.drop(['Close'], axis=1, inplace=True)
+    df.drop(['Entry_Price'], axis=1, inplace=True)
     
-    dataset = np.array(df[:-200])
-    test = np.array(df[-200:])
+    dataset = np.array(df[:-400])
+    test = np.array(df[-400:])
     
     indicators = df.columns
     
@@ -35,8 +35,8 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     else:
         gp = SymbolicMaximizer(population_size=pop, generations=gen,
                                tournament_size=20, max_num_rules=15, 
-			       rules_set=rules, indicators_set=indicators, 
-                               n_jobs=-1, verbose=verbose, 
+			                   rules_set=rules, indicators_set=indicators, 
+                               n_jobs=1, verbose=verbose, 
                                random_state=1, elitism=False)
 
     gp.fit(dataset, prices, 100)
@@ -57,4 +57,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=500, generations=500, zscore=False, verbose=0, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=500, generations=500, zscore=False, verbose=1, load=False, save=True)

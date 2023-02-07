@@ -22,63 +22,63 @@ class Rules_bot(object):
         
         
         if self.program is not None:
-            if not self.validate_program(rules):
+            if not self.validate_program():
                 raise ValueError(f'The supplied program: {self.program}, is incomplete.')
         else:
             # Create a naive random program
-            self.program = self.generate_program(max_num_rules, rules, indicators, random_state)
+            self.program = self.generate_program(max_num_rules, random_state)
 
-    def generate_new_rule(self, random_state, rules, indicators, specific_rule_type=None):
+    def generate_new_rule(self, random_state, rules, specific_rule_type=None):
       
       if specific_rule_type is None:
         rule_type = random_state.randint(0, len(rules))
       else:
-        possible_rule_types = [0, 2] if specific_rule_type == 'buy' else [1, 2]
+        possible_rule_types = [0, 2] if specific_rule_type == 0 else [1, 2]
         rule_type = random_state.choice(possible_rule_types)
         
       if rule_type == 2:
         if specific_rule_type is None:
           rule_index = random_state.randint(0, len(rules[2]))
-        elif specific_rule_type=='buy':
+        elif specific_rule_type==0:
           rule_index = random_state.randint(0, len(rules[2])/2)
         else:
           rule_index = random_state.randint(len(rules[2])/2, len(rules[2]))
           
-        rule1 = self.generate_new_rule(random_state, rules[0:2], indicators)
-        rule2 = self.generate_new_rule(random_state, rules[0:2], indicators)
+        rule1 = self.generate_new_rule(random_state, self.rules[0:2])
+        rule2 = self.generate_new_rule(random_state, self.rules[0:2])
         rule = [rule_type, rule_index, rule1, rule2]
         return rule
 
       rule_index = random_state.randint(0, len(rules[rule_type]))
       arity = rules[rule_type][rule_index].arity
-      indicator_indeces = random_state.randint(0, len(indicators), arity)
+      indicator_indeces = random_state.randint(0, len(self.indicators), arity)
       rule = [rule_type, rule_index, indicator_indeces]
       return rule
 
-    def generate_program(self, max_num_rules, rules, indicators, random_state):
+    def generate_program(self, max_num_rules, random_state):
       
       program = []
       
       number_of_rules = random_state.randint(3, max_num_rules)
       for _ in range(number_of_rules-1):
-        rule = self.generate_new_rule(random_state, rules, indicators)
+        rule = self.generate_new_rule(random_state, self.rules)
         program.append(rule)
         
-      if self.validate_program(rules, program) == False:
+      if self.validate_program(program) == False:
         rule_type = program[-1][0]
         rule_index = program[-1][1]
-        if rules[rule_type][rule_index].is_buyrule():
-          rule = self.generate_new_rule(random_state, rules, indicators, 'sell')
+        if self.rules[rule_type][rule_index].is_buyrule():
+          rule = self.generate_new_rule(random_state, self.rules, 1)
         else:
-          rule = self.generate_new_rule(random_state, rules, indicators, 'buy')
+          rule = self.generate_new_rule(random_state, self.rules, 0)
         program.append(rule)
       else:
-        rule = self.generate_new_rule(random_state, rules, indicators)
+        rule = self.generate_new_rule(random_state, self.rules)
         program.append(rule)
         
       return program
         
-    def validate_program(self, rules, program = None):
+    def validate_program(self, program = None):
       
       if program is None:
         program = self.program
@@ -91,9 +91,9 @@ class Rules_bot(object):
       buy_rule = False
       sell_rule = False
       for rule in program:
-        if rules[rule[0]][rule[1]].is_buyrule():
+        if self.rules[rule[0]][rule[1]].is_buyrule():
           buy_rule = True
-        if rules[rule[0]][rule[1]].is_sellrule():
+        if self.rules[rule[0]][rule[1]].is_sellrule():
           sell_rule = True
       if not buy_rule or not sell_rule:
         return False
@@ -134,9 +134,9 @@ class Rules_bot(object):
       rule_type = removed[0]
       
       if rule_type == 2:
-        rule_type = 'buy' if self.rules[rule_type][removed[1]].is_buyrule() else 'sell'
+        rule_type = 0 if self.rules[rule_type][removed[1]].is_buyrule() else 1
       
-      chicken = self.generate_new_rule(random_state, self.rules, self.indicators, rule_type)
+      chicken = self.generate_new_rule(random_state, self.rules, rule_type)
       self.program[rule_index] = chicken
       return self.program, removed, chicken
   
@@ -180,29 +180,29 @@ class Rules_bot(object):
         
       return self.program, removed
     
-    def evaluate_simple(self, data, rule, rules_list):
-      exec_rule = rules_list[rule[0]][rule[1]]
+    def evaluate_simple(self, data, rule):
+      exec_rule = self.rules[rule[0]][rule[1]]
       return exec_rule.function(*data[:, rule[2]].T)
     
-    def evaluate_composed(self, data, rule, rules_list):
-      result1 = self.evaluate_simple(data, rule[2], rules_list)
-      result2 = self.evaluate_simple(data, rule[3], rules_list)
-      return rules_list[rule[0]][rule[1]].function(result1, result2)
+    def evaluate_composed(self, data, rule):
+      result1 = self.evaluate_simple(data, rule[2])
+      result2 = self.evaluate_simple(data, rule[3])
+      return self.rules[rule[0]][rule[1]].function(result1, result2)
     
-    def evaluate(self, data_window, rules):
+    def evaluate(self, data_window):
       buy = False
       sell = False
 
       for rule in self.program:
         if rule[0] == 2:
-          result = self.evaluate_composed(data_window, rule, rules)
+          result = self.evaluate_composed(data_window, rule)
         else:
-          result = self.evaluate_simple(data_window, rule, rules)
+          result = self.evaluate_simple(data_window, rule)
         
         # print(f'rule: {rules[rule[0]][rule[1]].name}, isbuy: {rules[rule[0]][rule[1]].is_buyrule()}, issell: {rules[rule[0]][rule[1]].is_sellrule()}, result : {result}')
         
         if result:
-          if rules[rule[0]][rule[1]].is_buyrule():
+          if self.rules[rule[0]][rule[1]].is_buyrule():
             buy = True
           else:
             sell = True
@@ -217,9 +217,9 @@ class Rules_bot(object):
       self.in_the_market = False
       self.investment = self.investment / self.buy_price * current_price
       
-    def buy_sell_op(self, data_window, current_price, i, rules):
+    def buy_sell_op(self, data_window, current_price, i):
     
-      buy, sell = self.evaluate(data_window, rules)
+      buy, sell = self.evaluate(data_window)
 
       if buy:
         if self.in_the_market == False:
@@ -230,13 +230,13 @@ class Rules_bot(object):
           self.sell_ops.append(i)
           self.sell(current_price - current_price*0.003)
           
-    def raw_fitness(self, data, prices, rules, init_investment):
+    def raw_fitness(self, data, prices, init_investment):
       self.investment = init_investment
       
       for i in range(4, len(data)):
         data_window = data[i-4:i,:]
         current_price = prices[i]
-        self.buy_sell_op(data_window, current_price, i, rules)
+        self.buy_sell_op(data_window, current_price, i)
         
       # if we are in the market at the end of the time series, sell    
       if self.in_the_market:

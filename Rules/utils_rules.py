@@ -214,7 +214,7 @@ def AddIndicators(df):
     df["RSI"] = rsi(close=df["Close"], window=14, fillna=True) # mazas
     
     # Add Exponential Moving Average (EMA) indicator
-    df['EMA9'] = EMAIndicator(close=df["Close"], window=9, fillna=True).ema_indicator()
+    df['EMA9'] = EMAIndicator(close=df["Close"], window=11, fillna=True).ema_indicator()
     df["EMA21"] = EMAIndicator(close=df["Close"], window=21, fillna=True).ema_indicator()
     df["EMA130"] = EMAIndicator(close=df["Close"], window=130, fillna=True).ema_indicator()
     df["EMA200"] = EMAIndicator(close=df["Close"], window=200, fillna=True).ema_indicator()
