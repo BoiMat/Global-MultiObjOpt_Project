@@ -11,7 +11,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g_close_morefeatures'
+    name = f'BTC_{pop}p_{gen}g_elitism'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=zscore)
@@ -31,7 +31,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
                             tournament_size=20, init_depth=(2, 6), 
                             function_set=function_set,
                             parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
-                            feature_names=features, 
+                            feature_names=features, elitism=True,
                             n_jobs=-1, verbose=verbose, random_state=1)
 
     gp.fit(dataset, 1)
@@ -54,4 +54,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=500, generations=200, zscore=False, verbose=0, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=500, generations=200, zscore=False, verbose=1, load=False, save=True)

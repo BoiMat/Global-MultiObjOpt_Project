@@ -9,7 +9,7 @@ from sklearn.base import BaseEstimator
 
 MAX_INT = np.iinfo(np.int32).max
 
-def _parallel_evolve(n_programs, parents, X, init_investment, seeds, params):
+def _parallel_evolve(n_programs, parents, X, init_investment, seeds, params, elitism):
 
     tournament_size = params['tournament_size']
     function_set = params['function_set']
@@ -94,6 +94,12 @@ def _parallel_evolve(n_programs, parents, X, init_investment, seeds, params):
         program.raw_fitness_ = program.raw_fitness(init_investment, X)
 
         programs.append(program)
+        
+        if elitism & (parents is not None):    
+            # add the best 20 programs to the next generation
+            hall_of_fame = sorted(parents, key=lambda x: x.raw_fitness_, reverse=True)[:20]
+            for program in hall_of_fame:
+                programs.append(program)
 
     return programs
 
@@ -116,6 +122,7 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
                  p_point_mutation=0.01,
                  p_point_replace=0.05,
                  feature_names=None,
+                 elitism=False,
                  n_jobs=1,
                  verbose=0,
                  random_state=None):
@@ -137,6 +144,7 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
         self.n_jobs = n_jobs
         self.verbose = verbose
         self.random_state = random_state
+        self.elitism = elitism
 
     def _verbose_reporter(self, run_details=None):
 
@@ -224,7 +232,7 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
             seeds = random_state.randint(MAX_INT, size=self.population_size)
             
             population = Parallel(n_jobs=n_jobs, verbose=int(self.verbose > 1))(
-                delayed(_parallel_evolve)(n_programs[i], parents, X, init_investment, seeds[starts[i]:starts[i+1]], params) 
+                delayed(_parallel_evolve)(n_programs[i], parents, X, init_investment, seeds[starts[i]:starts[i+1]], params, self.elitism) 
                 for i in range(n_jobs))
             
             population = list(itertools.chain.from_iterable(population))
@@ -281,6 +289,7 @@ class SymbolicMaximizer(BaseSymbolic):
                  p_point_mutation=0.01,
                  p_point_replace=0.05,
                  feature_names=None,
+                 elitism=False,
                  n_jobs=1,
                  verbose=0,
                  random_state=None):
@@ -300,6 +309,7 @@ class SymbolicMaximizer(BaseSymbolic):
             p_point_mutation=p_point_mutation,
             p_point_replace=p_point_replace,
             feature_names=feature_names,
+            elitism=elitism,
             n_jobs=n_jobs,
             verbose=verbose,
             random_state=random_state)
