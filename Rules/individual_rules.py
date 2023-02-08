@@ -100,8 +100,33 @@ class Rules_bot(object):
       
       return True
       
-    def __str__(self) -> str:
-      return self.program
+    def __str__(self):
+      output = ''
+      for rule in self.program:
+        if rule[0] == 2:
+          output += 'if ' + self.rules[rule[2][0]][rule[2][1]].name + '(' 
+          for i in rule[2][2]: 
+            output += self.indicators[i]
+            if i != rule[2][2][-1]:
+              output += ', '        
+          output += ') and ' + self.rules[rule[3][0]][rule[3][1]].name + '(' 
+          for i in rule[3][2]:
+            output += self.indicators[i]
+            if i != rule[3][2][-1]:
+              output += ', '
+          output += ')' + ' -> '
+          output += 'buy' if self.rules[rule[0]][rule[1]].is_buyrule() else 'sell' 
+          output += '\n'
+        else:
+          output += 'if ' +  self.rules[rule[0]][rule[1]].name + '(' 
+          for i in rule[2]: 
+            output += self.indicators[i]
+            if i != rule[2][-1]:
+              output += ', '
+          output += ')' + ' -> '
+          output += 'buy' if self.rules[rule[0]][rule[1]].is_buyrule() else 'sell' 
+          output += '\n'
+      return output
          
     def __repr__(self):
       return self.__str__()
