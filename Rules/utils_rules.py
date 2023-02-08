@@ -192,10 +192,10 @@ def _partition_estimators(n_estimators, n_jobs):
     return n_jobs, n_estimators_per_job.tolist(), [0] + starts.tolist()
     
 def AddIndicators(df):
-    # Add Simple Moving Average (SMA) indicators
-    df["sma7"] = SMAIndicator(close=df["Close"], window=7, fillna=True).sma_indicator()
-    df["sma25"] = SMAIndicator(close=df["Close"], window=25, fillna=True).sma_indicator()
-    df["sma99"] = SMAIndicator(close=df["Close"], window=99, fillna=True).sma_indicator()
+    # # Add Simple Moving Average (SMA) indicators
+    # df["sma7"] = SMAIndicator(close=df["Close"], window=7, fillna=True).sma_indicator()
+    # df["sma25"] = SMAIndicator(close=df["Close"], window=25, fillna=True).sma_indicator()
+    # df["sma99"] = SMAIndicator(close=df["Close"], window=99, fillna=True).sma_indicator()
     
     # Add Bollinger Bands indicator
     indicator_bb = BollingerBands(close=df["Close"], window=20, window_dev=2)
@@ -214,7 +214,7 @@ def AddIndicators(df):
     df["RSI"] = rsi(close=df["Close"], window=14, fillna=True) # mazas
     
     # Add Exponential Moving Average (EMA) indicator
-    df['EMA9'] = EMAIndicator(close=df["Close"], window=11, fillna=True).ema_indicator()
+    df['EMA11'] = EMAIndicator(close=df["Close"], window=11, fillna=True).ema_indicator()
     df["EMA21"] = EMAIndicator(close=df["Close"], window=21, fillna=True).ema_indicator()
     df["EMA130"] = EMAIndicator(close=df["Close"], window=130, fillna=True).ema_indicator()
     df["EMA200"] = EMAIndicator(close=df["Close"], window=200, fillna=True).ema_indicator()
