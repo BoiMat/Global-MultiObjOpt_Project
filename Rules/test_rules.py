@@ -12,7 +12,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g_rules'
+    name = f'BTC_{pop}p_{gen}g_rules_zscore'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=zscore)
@@ -57,4 +57,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=500, generations=500, zscore=False, verbose=0, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=500, generations=500, zscore=True, verbose=0, load=False, save=True)
