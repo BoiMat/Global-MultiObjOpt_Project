@@ -17,13 +17,13 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
 
     df, df_normalized = dataset_func(zscore=zscore)
 
-    prices = np.array(df['Entry_Price'][:-400])
-    prices_test = np.array(df['Entry_Price'][-400:])
+    prices = np.array(df['Entry_Price'][:-365])
+    prices_test = np.array(df['Entry_Price'][-365:])
 
     df.drop(['Entry_Price'], axis=1, inplace=True)
     
-    dataset = np.array(df[:-400])
-    test = np.array(df[-400:])
+    dataset = np.array(df[:-365])
+    test = np.array(df[-365:])
     
     indicators = df.columns
     
