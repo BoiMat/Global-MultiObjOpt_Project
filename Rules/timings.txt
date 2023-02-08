@@ -1,3 +1,6 @@
 Runtime BTC: 16.7 (mm.ss)
 Runtime BTC: 16.35 (mm.ss)
 Runtime BTC: 15.51 (mm.ss)
+Runtime BTC: 2.43 (mm.ss)
+Runtime BTC: 16.26 (mm.ss)
+Runtime BTC: 47.4 (mm.ss)
