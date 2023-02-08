@@ -30,7 +30,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
         gp = SymbolicMaximizer(population_size=pop, generations=gen,
                             tournament_size=20, init_depth=(2, 6), 
                             function_set=function_set,
-                            parsimony_coefficient=0.01, p_hoist_mutation=0.05, 
+                            parsimony_coefficient=0.05, p_hoist_mutation=0.05, 
                             feature_names=features, elitism=True,
                             n_jobs=-1, verbose=verbose, random_state=1)
 
