@@ -11,7 +11,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g_elitism'
+    name = f'BTC_{pop}p_{gen}g_close'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=zscore)
