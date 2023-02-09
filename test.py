@@ -11,15 +11,15 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g_close'
+    name = f'BTC_{pop}p_{gen}g_zscore_elitism'
     path = 'models/' + name + '.pkl'
 
     df, df_normalized = dataset_func(zscore=zscore)
 
     features = df_normalized.columns[:-1]
 
-    dataset = np.array(df_normalized[:-400])
-    test = np.array(df_normalized[-400:])
+    dataset = np.array(df_normalized[:-365])
+    test = np.array(df_normalized[-365:])
     
     function_set = default_function_set()
     
@@ -54,4 +54,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=500, generations=200, zscore=False, verbose=0, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=500, generations=200, zscore=True, verbose=0, load=False, save=True)
