@@ -9,6 +9,41 @@ from sklearn.base import BaseEstimator
 
 MAX_INT = np.iinfo(np.int32).max
 
+def average_loading_price(program):
+    return -program.fitness_
+
+def number_of_trades(program):
+    return len(program.buy_ops)
+
+def pareto_rank(population, objectives):
+
+    n_obj = len(objectives)
+    pop_size = len(population)
+
+    objectives_values = [[obj(solution) for obj in objectives] for solution in population]
+
+    ranks = [0] * pop_size
+    front = [[] for _ in range(pop_size + 1)]
+    
+    for i in range(pop_size):
+        for j in range(pop_size):
+            if i == j:
+                continue
+            dominates = False
+            for k in range(n_obj):
+                if objectives_values[j][k] > objectives_values[i][k]:
+                    dominates = True
+                    break
+            if dominates:
+                ranks[j] += 1
+
+    for i, rank in enumerate(ranks):
+        front[rank].append(i)
+
+    pareto_ranks = [solution for rank, group in enumerate(front) for solution in group]
+    
+    return pareto_ranks
+
 def _parallel_evolve(n_programs, parents, X, init_investment, seeds, params, elitism):
 
     tournament_size = params['tournament_size']
@@ -24,8 +59,8 @@ def _parallel_evolve(n_programs, parents, X, init_investment, seeds, params, eli
 
     def tournament_selection():
         contenders = random_state.randint(0, len(parents), tournament_size)
-        fitness = [parents[p].fitness_ for p in contenders]
-        parent_index = contenders[np.argmax(fitness)]
+        pareto_ranks = pareto_rank(parents[contenders], [number_of_trades, average_loading_price])
+        parent_index = contenders[np.argmin([pareto_ranks[i] for i in contenders])]
         return parents[parent_index], parent_index
 
     programs = []
@@ -266,8 +301,6 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
 
             if self.verbose:
                 self._verbose_reporter(self.run_details_)
-                
-            # self._program = self._programs[-1][np.argmax(fitness)]
 
         return self
     

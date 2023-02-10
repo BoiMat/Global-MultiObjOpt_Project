@@ -7,15 +7,17 @@ import pickle
 import time
 
 
-def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=False, verbose=0, load=False, save=False):
+def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=False, elitism=False, verbose=0, load=False, save=False):
     
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g_rules_zscore_elitism'
+    name = f'BTC_{pop}p_{gen}g_rules_'
+    name += 'zscore_' if zscore else 'close_'
+    name += 'elitism_' if elitism else ''
     path = 'models/' + name + '.pkl'
 
-    df, df_normalized = dataset_func(zscore=zscore)
+    df, _ = dataset_func(zscore=zscore)
 
     prices = np.array(df['Entry_Price'][:-365])
     prices_test = np.array(df['Entry_Price'][-365:])
@@ -37,7 +39,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
                                tournament_size=20, max_num_rules=15, 
 			                   rules_set=rules, indicators_set=indicators, 
                                n_jobs=-1, verbose=verbose, 
-                               random_state=1, elitism=True)
+                               random_state=1, elitism=elitism)
 
     gp.fit(dataset, prices, 100)
     
@@ -48,10 +50,10 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     plot_results(prices, gp._program.buy_ops, gp._program.sell_ops, title=name, save=True, name=name)
     
     length_buy_ops = len(gp._program.buy_ops)
-    print(gp.predict(test, prices_test, 100))
+    gp.predict(test, prices_test, 100, verbose=True)
     
     plot_results(prices_test, gp._program.buy_ops[length_buy_ops:], gp._program.sell_ops[length_buy_ops:], title=name, save=True, name=name+'_test')
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=500, generations=500, zscore=True, verbose=0, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=500, generations=500, zscore=True, elitism=False, verbose=0, load=False, save=True)

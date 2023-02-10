@@ -1,4 +1,4 @@
-from genetic import SymbolicMaximizer
+from genetic_multiobj import SymbolicMaximizer
 from data import *
 import pickle
 
