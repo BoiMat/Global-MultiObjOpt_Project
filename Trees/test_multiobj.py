@@ -7,9 +7,9 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g_'
-    name += 'zscore_' if zscore else 'close_'
-    name += 'elitism_' if elitism else ''
+    name = f'BTC_{pop}p_{gen}g'
+    name += '_zscore' if zscore else '_close'
+    name += '_elitism' if elitism else ''
     path = 'models/' + name + '.pkl'
 
     _, df_normalized = dataset_func(zscore=zscore)
