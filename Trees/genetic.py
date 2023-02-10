@@ -322,11 +322,20 @@ class SymbolicMaximizer(BaseSymbolic):
     def _more_tags(self):
         return {'binary_only': True}
 
-    def predict(self, X, init_investment = 100):
-        
-        # if not hasattr(self, '_program'):
-        #     raise NotFittedError('SymbolicMaximizer not fitted.')
+    def predict(self, data, init_investment = 100):
+
+        length_buy_ops = len(self._program.buy_ops)
         
         self._program.investment = init_investment
-        score = self._program.raw_fitness(init_investment, X)
-        return score - init_investment
+        self._program.raw_fitness(init_investment, data)
+        
+        buy_ops = self._program.buy_ops[length_buy_ops:]
+        sell_ops = self._program.sell_ops[length_buy_ops:]
+        investment = init_investment
+        
+        for i in range(len(buy_ops)):
+            buy_price = data[buy_ops[i], -1]
+            sell_price = data[sell_ops[i], -1]
+            investment = investment / buy_price * sell_price
+        
+        return investment

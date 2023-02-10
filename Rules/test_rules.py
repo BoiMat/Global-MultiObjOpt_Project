@@ -44,16 +44,13 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     if save:
         with open(path, 'wb') as f:
             pickle.dump(gp, f)
-
-    plt.figure(figsize=(16,8))
-    plt.plot(prices)
-    plt.xlabel('Date', fontsize=18)
-    plt.ylabel('Close Price USD ($)', fontsize=18)
-    # plot a buy signal
-    plt.scatter(df.index[gp._program.buy_ops], prices[gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
-    plt.scatter(df.index[gp._program.sell_ops], prices[gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
-    if save:
-        plt.savefig('images/' + name + '.png')
+            
+    plot_results(prices, gp._program.buy_ops, gp._program.sell_ops, title=name, save=True, name=name)
+    
+    length_buy_ops = len(gp._program.buy_ops)
+    print(gp.predict(test, prices_test, 100))
+    
+    plot_results(prices_test, gp._program.buy_ops[length_buy_ops:], gp._program.sell_ops[length_buy_ops:], title=name, save=True, name=name+'_test')
     
     
 if __name__ == '__main__':

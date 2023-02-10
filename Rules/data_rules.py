@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 def BTC_1d_Dataset(zscore = False):
     
-    df = pd.read_csv('Binance_BTCUSDT_d.csv')
+    df = pd.read_csv('../Datasets/Binance_BTCUSDT_d.csv')
     df.drop(['Symbol', 'Unix', 'Volume USDT', 'tradecount'], axis=1, inplace=True)
     df.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Volume']
     df = df.sort_values('Date')
@@ -45,7 +45,7 @@ def BTC_1d_Dataset(zscore = False):
     return df, df_normalized
 
 def SP500_1d_Dataset(zscore = False):
-    df = pd.read_csv('S&P500.csv')
+    df = pd.read_csv('../Datasets/S&P500.csv')
     df.columns = ['Date','Close', 'Open', 'High', 'Low', 'Volume', 'Change']
     df['Change'] = df['Change'].str.replace('%', '')
     df['Date'] = pd.to_datetime(df['Date'], format='%m/%d/%Y')
@@ -87,10 +87,16 @@ def SP500_1d_Dataset(zscore = False):
         
     return df, df_normalized
 
-def plot_data(df, title="Close Price History"):
-    plt.figure(figsize=(16,8))
-    plt.title(title)
-    plt.plot(df['Close'])
-    plt.xlabel('Date', fontsize=18)
-    plt.ylabel('Close Price USD ($)', fontsize=18)
-    plt.show()
+def plot_results(prices, buy_ops, sell_ops, title="_ Operations", save=False, name="BTC_"):
+   plt.figure(figsize=(18,10))
+   plt.plot(prices, label='Price')
+   plt.xlabel('Date (days)', fontsize=20)
+   plt.ylabel('Close Price USD ($)', fontsize=20)
+   plt.title(title, fontsize=22)
+   plt.xticks(fontsize=18)
+   plt.yticks(fontsize=18)
+   plt.scatter(buy_ops, prices[buy_ops], color='green', label='Buy', marker='^', alpha=1)
+   plt.scatter(sell_ops, prices[sell_ops], color='red', label='Sell', marker='v', alpha=1)
+   plt.legend(fontsize=18)
+   if save:
+      plt.savefig('images/' + name + '.png')

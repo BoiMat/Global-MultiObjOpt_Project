@@ -40,17 +40,12 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
         with open(path, 'wb') as f:
             pickle.dump(gp, f)
 
-    plt.figure(figsize=(16,8))
-    plt.title(name)
-    plt.plot(df_normalized.iloc[:,-1])
-    plt.xlabel('Date', fontsize=18)
-    plt.ylabel('Close Price USD ($)', fontsize=18)
-    # plot a buy signal
-    plt.scatter(df_normalized.index[gp._program.buy_ops], df_normalized.iloc[:,-1][gp._program.buy_ops], color='green', label='Buy', marker='^', alpha=1)
-    # plot a sell signal
-    plt.scatter(df_normalized.index[gp._program.sell_ops], df_normalized.iloc[:,-1][gp._program.sell_ops], color='red', label='Sell', marker='v', alpha=1)
-    if save:
-        plt.savefig('images/' + name + '.png')
+    plot_results(dataset, gp._program.buy_ops, gp._program.sell_ops, title=name, save=True, name=name)
+    
+    length_buy_ops = len(gp._program.buy_ops)
+    print(gp.predict(test, 1))
+    
+    plot_results(test, gp._program.buy_ops[length_buy_ops:], gp._program.sell_ops[length_buy_ops:], title=name, save=True, name=name+'_test')
     
     
 if __name__ == '__main__':

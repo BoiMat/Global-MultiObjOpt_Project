@@ -314,8 +314,20 @@ class SymbolicMaximizer(BaseSymbolic):
     def _more_tags(self):
         return {'binary_only': True}
 
-    def predict(self, data, rules, prices, init_investment = 100):
+    def predict(self, data, prices, init_investment = 100):
  
+        length_buy_ops = len(self._program.buy_ops)
+        
         self._program.investment = init_investment
-        score = self._program.raw_fitness(data, prices, init_investment)
-        return score - init_investment
+        self._program.raw_fitness(data, prices, init_investment)
+        
+        buy_ops = self._program.buy_ops[length_buy_ops:]
+        sell_ops = self._program.sell_ops[length_buy_ops:]
+        investment = init_investment
+        
+        for i in range(len(buy_ops)):
+            buy_price = data[buy_ops[i]]
+            sell_price = data[sell_ops[i]]
+            investment = investment / buy_price * sell_price
+        
+        return investment
