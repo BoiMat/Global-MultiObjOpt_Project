@@ -59,8 +59,8 @@ def _parallel_evolve(n_programs, parents, X, init_investment, seeds, params, eli
 
     def tournament_selection():
         contenders = random_state.randint(0, len(parents), tournament_size)
-        pareto_ranks = pareto_rank(parents[contenders], [number_of_trades, average_loading_price])
-        parent_index = contenders[np.argmin([pareto_ranks[i] for i in contenders])]
+        pareto_ranks = pareto_rank([parents[i] for i in contenders], [number_of_trades, average_loading_price])
+        parent_index = contenders[np.argmin(pareto_ranks)]
         return parents[parent_index], parent_index
 
     programs = []
