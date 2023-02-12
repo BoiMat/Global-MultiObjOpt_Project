@@ -20,6 +20,7 @@ class Tree(object):
         self.parents = None
         
         self.investment = init_investment
+        self.max_drawdown = 0
         self.buy_price = None
         self.in_the_market = False
         self.buy_ops = []
@@ -292,6 +293,9 @@ class Tree(object):
     
     def sell(self, current_price):
         self.in_the_market = False
+        profit = self.investment / self.buy_price * current_price - self.investment
+        if profit < self.max_drawdown:
+            self.max_drawdown = profit
         self.investment = self.investment / self.buy_price * current_price
         
     def buy_sell_op(self, X, current_price, i):

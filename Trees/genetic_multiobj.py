@@ -9,11 +9,11 @@ from sklearn.base import BaseEstimator
 
 MAX_INT = np.iinfo(np.int32).max
 
-def average_loading_price(program):
-    return -program.fitness_
+def profit(program):
+    return program.fitness_
 
-def number_of_trades(program):
-    return len(program.buy_ops)
+def max_drawdown(program):
+    return program.max_drawdown
 
 def pareto_rank(population, objectives):
 
@@ -59,7 +59,7 @@ def _parallel_evolve(n_programs, parents, X, init_investment, seeds, params, eli
 
     def tournament_selection():
         contenders = random_state.randint(0, len(parents), tournament_size)
-        pareto_ranks = pareto_rank([parents[i] for i in contenders], [number_of_trades, average_loading_price])
+        pareto_ranks = pareto_rank([parents[i] for i in contenders], [max_drawdown, profit])
         parent_index = contenders[np.argmin(pareto_ranks)]
         return parents[parent_index], parent_index
 
