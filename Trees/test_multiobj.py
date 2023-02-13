@@ -7,7 +7,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     pop = population
     gen = generations
     
-    name = f'BTC_{pop}p_{gen}g'
+    name = f'BTC_{pop}p_{gen}g_multiobj'
     name += '_zscore' if zscore else '_close'
     name += '_elitism' if elitism else ''
     path = 'models/' + name + '.pkl'
@@ -47,4 +47,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=500, generations=200, zscore=False, elitism=False, verbose=0, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=500, generations=200, zscore=False, elitism=True, verbose=0, load=False, save=True)
