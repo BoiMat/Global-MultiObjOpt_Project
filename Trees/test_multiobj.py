@@ -47,4 +47,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=500, generations=200, zscore=True, elitism=True, verbose=0, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=400, generations=200, zscore=False, elitism=False, verbose=0, load=False, save=True)
