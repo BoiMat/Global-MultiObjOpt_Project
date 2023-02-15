@@ -28,7 +28,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
         gp = SymbolicMaximizer(population_size=pop, generations=gen,
                             tournament_size=20, init_depth=(2, 6), 
                             function_set=function_set,
-                            parsimony_coefficient=0.05, p_hoist_mutation=0.05, 
+                            parsimony_coefficient=0.5, p_hoist_mutation=0.05, 
                             feature_names=features, elitism=elitism,
                             n_jobs=-1, verbose=verbose, random_state=1)
 
@@ -47,4 +47,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=300, generations=100, zscore=False, elitism=False, verbose=0, load=False, save=True)
+    main(dataset_func = BTC_1d_Dataset, population=300, generations=100, zscore=False, elitism=False, verbose=1, load=False, save=True)
