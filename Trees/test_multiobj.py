@@ -2,7 +2,7 @@ from genetic_multiobj import SymbolicMaximizer
 from data import *
 import pickle
 
-def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=False, elitism=False, verbose=0, load=False, save=False, warm_start=False):
+def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=False, elitism=False, verbose=0, load=False, save=False, warm_start_gen=None):
     
     pop = population
     gen = generations
@@ -35,9 +35,10 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
         with open(path, 'rb') as f:
             gp = pickle.load(f)
             
-        if warm_start:
-            gp.set_params(generations = generations, warm_start=True)
+        if warm_start_gen is not None:
+            gp.set_params(generations = gen, warm_start=True)
             gp.fit(dataset, 1)
+	    path = path.replace(f'{gen}g', f'{gen+warm_start_gen}g')
         
     if save:
         with open(path, 'wb') as f:
@@ -52,4 +53,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=30, generations=20, zscore=False, elitism=False, verbose=1, load=True, save=True, warm_start=True)
+    main(dataset_func = BTC_1d_Dataset, population=30, generations=20, zscore=False, elitism=False, verbose=0, load=False, save=True, warm_start_gen=None)
