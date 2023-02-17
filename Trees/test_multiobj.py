@@ -35,7 +35,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
             gp = pickle.load(f)
             
         if warm_start_gen is not None:
-            gp.set_params(generations = gen, warm_start=True)
+            gp.set_params(generations = gen + warm_start_gen, warm_start=True)
             gp.fit(dataset, 1)
             path = path.replace(f'{gen}g', f'{gen+warm_start_gen}g')
         
@@ -52,4 +52,4 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
     
     
 if __name__ == '__main__':
-    main(dataset_func = BTC_1d_Dataset, population=30, generations=20, zscore=False, elitism=False, verbose=0, load=False, save=True, warm_start_gen=None)
+    main(dataset_func = BTC_1d_Dataset, population=30, generations=20, zscore=False, elitism=False, verbose=0, load=True, save=True, warm_start_gen=20)
