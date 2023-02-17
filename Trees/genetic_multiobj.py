@@ -6,6 +6,7 @@ from utils import _Function, check_random_state, _get_n_jobs, _partition_estimat
 from individual import Tree
 import numpy as np
 from sklearn.base import BaseEstimator
+from warnings import warn
 
 MAX_INT = np.iinfo(np.int32).max
 
@@ -158,6 +159,7 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
                  p_point_replace=0.05,
                  feature_names=None,
                  elitism=False,
+                 warm_start=False,
                  n_jobs=1,
                  verbose=0,
                  random_state=None):
@@ -176,6 +178,7 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
         self.p_point_mutation = p_point_mutation
         self.p_point_replace = p_point_replace
         self.feature_names = feature_names
+        self.warm_start = warm_start
         self.n_jobs = n_jobs
         self.verbose = verbose
         self.random_state = random_state
@@ -238,7 +241,7 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
         params['arities'] = self._arities
         params['method_probs'] = self._method_probs
         
-        if not hasattr(self, '_programs'):
+        if not self.warm_start or not hasattr(self, '_programs'):
             self._programs = []
             self.run_details_ = {'generation': [],
                                 'average_length': [],
@@ -248,7 +251,21 @@ class BaseSymbolic(BaseEstimator, metaclass=ABCMeta):
                                 'generation_time': []}
 
         prior_generations = len(self._programs)
+        n_more_generations = self.generations - prior_generations
 
+        if n_more_generations < 0:
+            raise ValueError('generations=%d must be larger or equal to '
+                             'len(_programs)=%d when warm_start==True'
+                             % (self.generations, len(self._programs)))
+        elif n_more_generations == 0:
+            fitness = [program.raw_fitness_ for program in self._programs[-1]]
+            warn('Warm-start fitting without increasing n_estimators does not '
+                 'fit new programs.')
+
+        if self.warm_start:
+            for i in range(len(self._programs)):
+                _ = random_state.randint(MAX_INT, size=self.population_size)
+        
         if self.verbose:
             self._verbose_reporter()
 
@@ -323,6 +340,7 @@ class SymbolicMaximizer(BaseSymbolic):
                  p_point_replace=0.05,
                  feature_names=None,
                  elitism=False,
+                 warm_start=False,
                  n_jobs=1,
                  verbose=0,
                  random_state=None):
@@ -343,6 +361,7 @@ class SymbolicMaximizer(BaseSymbolic):
             p_point_replace=p_point_replace,
             feature_names=feature_names,
             elitism=elitism,
+            warm_start=warm_start,
             n_jobs=n_jobs,
             verbose=verbose,
             random_state=random_state)
