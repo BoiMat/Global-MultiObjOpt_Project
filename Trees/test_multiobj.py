@@ -38,7 +38,7 @@ def main(dataset_func = BTC_1d_Dataset, population=200, generations=200, zscore=
         if warm_start_gen is not None:
             gp.set_params(generations = gen, warm_start=True)
             gp.fit(dataset, 1)
-	    path = path.replace(f'{gen}g', f'{gen+warm_start_gen}g')
+	        path = path.replace(f'{gen}g', f'{gen+warm_start_gen}g')
         
     if save:
         with open(path, 'wb') as f:
